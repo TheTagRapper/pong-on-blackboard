@@ -96,12 +96,22 @@ module display_controller(
     
     logic [7:0] r0, g0, b0;
     logic [7:0] r1, b1, g1;
+    logic [21:0] frame_divider;
+    
+    always_ff @(posedge clk_25MHZ or negedge nReset)
+    begin 
+        if (~nReset) frame_divider <= 0;
+        else if ((frame_divider ==250000 )) frame_divider <= 0; 
+        else frame_divider <= frame_divider + 1;  
+    end
+    
+    
     
     logic box_on_0, box_on_1;
     
-    pong_bar #(.PLAYER(0)) pb0 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(nReset), .red(r0), .green(g0) , .blue(b0), .box_on(box_on_0));
+    pong_bar #(.PLAYER(0)) pb0 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(nReset), .red(r0), .green(g0) , .blue(b0), .box_on(box_on_0), .frame_divider(frame_divider));
     
-    pong_bar #(.PLAYER(1)) pb1 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(nReset), .red(r1), .green(g1) , .blue(b1), .box_on(box_on_1));
+    pong_bar #(.PLAYER(1)) pb1 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(nReset), .red(r1), .green(g1) , .blue(b1), .box_on(box_on_1), .frame_divider(frame_divider));
 
     always_comb
     begin
