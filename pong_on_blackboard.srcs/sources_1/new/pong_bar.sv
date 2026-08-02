@@ -20,31 +20,37 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module pong_box #(parameter SWITCH_NUMBER = 0, PLAYER = 0) (
+module pong_bar #(parameter PLAYER = 0) (
         input logic [9:0] px, py,
         input logic [11:0] sw,
         input logic display_clock,
         input logic nReset,
-        output logic [7:0] red, green, blue
+        output logic [7:0] red, green, blue,
+        output logic box_on
     );
+    
     
     
     
         logic [9:0] box_px, box_py; // Does top left
     logic [23:0] bg_color, box_color;
     logic [7:0] box_width, box_height;
+    logic [3:0] SWITCH_NUMBER;
     
-    assign bg_color = 24'hFFFFFF;
-    assign box_color = 24'hEF23FE;
+    
+    assign bg_color = 24'h000000;
+    assign box_color = 24'hFFFFFF;
     assign box_width = 32;
     assign box_height = 64;
-    assign box_px = (PLAYER == 1) ? 16 : 592;
-   
+    assign box_px = (PLAYER == 0 ? (16) : (592));
+    assign SWITCH_NUMBER = (PLAYER == 0 ? (11) : (0));
+    
+    
    
     always_comb
     begin
         // Rendering Box
-        if ( (px < box_px + box_width) && (px > box_px) && (py < box_py + box_height) && (py > box_py) ) {red, green, blue} = box_color;
+        if ( (px < box_px + box_width) && (px >= box_px) && (py <= box_py + box_height) && (py >= box_py) ) {red, green, blue, box_on} = {box_color, 1'b1};
         else {red, green, blue} = bg_color; 
     
     end
@@ -52,7 +58,7 @@ module pong_box #(parameter SWITCH_NUMBER = 0, PLAYER = 0) (
     
     logic out_of_bounds;
     
-    assign out_of_bounds = (((box_py >= 480 - box_height) && (sw[0] == 0)) || ((box_py == 0) && (sw[0] == 1)));
+    assign out_of_bounds = (((box_py > 480 - box_height) && (sw[SWITCH_NUMBER] == 0)) || ((box_py == 0) && (sw[SWITCH_NUMBER] == 1)));
         
     // Controls how the speed works
     logic [21:0] frame_divider;
@@ -70,11 +76,11 @@ module pong_box #(parameter SWITCH_NUMBER = 0, PLAYER = 0) (
             begin
                 if (sw[SWITCH_NUMBER])
                     begin
-                        box_py <= box_py + 1;
+                        box_py <= box_py - 1;
                     end
                 else
                     begin
-                        box_py <= box_py - 1;                
+                        box_py <= box_py + 1;                
                     end 
             end
          end

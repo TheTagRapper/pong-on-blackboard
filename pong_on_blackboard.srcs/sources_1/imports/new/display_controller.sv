@@ -23,7 +23,7 @@
 module display_controller(
         input logic clk,
         input logic [3:0] btn,
-        input logic [9:0] sw,
+        input logic [11:0] sw,
         
         output logic hdmi_clk_n, hdmi_clk_p, 
         output logic [2:0] hdmi_tx_n,
@@ -94,6 +94,20 @@ module display_controller(
     
     
     
+    logic [7:0] r0, g0, b0;
+    logic [7:0] r1, b1, g1;
     
-    pong_box pb0 (.px(px), .py(py), .sw(sw[9:0]) , .display_clock(clk_25MHZ), .nReset(nReset), .red(red), .green(green) , .blue(blue));
+    logic box_on_0, box_on_1;
+    
+    pong_bar #(.PLAYER(0)) pb0 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(nReset), .red(r0), .green(g0) , .blue(b0), .box_on(box_on_0));
+    
+    pong_bar #(.PLAYER(1)) pb1 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(nReset), .red(r1), .green(g1) , .blue(b1), .box_on(box_on_1));
+
+    always_comb
+    begin
+        if (box_on_0) {red, green, blue} = {r0, g0, b0};
+        else {red, green, blue} = {r1, g1, b1};
+    end
+
+    
 endmodule
