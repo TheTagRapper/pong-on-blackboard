@@ -1,0 +1,35 @@
+
+create_debug_core u_ila_0 ila
+set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
+set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_0]
+set_property C_ADV_TRIGGER false [get_debug_cores u_ila_0]
+set_property C_DATA_DEPTH 1024 [get_debug_cores u_ila_0]
+set_property C_EN_STRG_QUAL false [get_debug_cores u_ila_0]
+set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0]
+set_property C_TRIGIN_EN false [get_debug_cores u_ila_0]
+set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0]
+set_property port_width 1 [get_debug_ports u_ila_0/clk]
+connect_debug_port u_ila_0/clk [get_nets [list cw0/inst/clk_out1]]
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe0]
+set_property port_width 10 [get_debug_ports u_ila_0/probe0]
+connect_debug_port u_ila_0/probe0 [get_nets [list {p_bo0/dy[0]} {p_bo0/dy[1]} {p_bo0/dy[2]} {p_bo0/dy[3]} {p_bo0/dy[4]} {p_bo0/dy[5]} {p_bo0/dy[6]} {p_bo0/dy[7]} {p_bo0/dy[8]} {p_bo0/dy[9]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe1]
+set_property port_width 10 [get_debug_ports u_ila_0/probe1]
+connect_debug_port u_ila_0/probe1 [get_nets [list {p_bo0/dx[0]} {p_bo0/dx[1]} {p_bo0/dx[2]} {p_bo0/dx[3]} {p_bo0/dx[4]} {p_bo0/dx[5]} {p_bo0/dx[6]} {p_bo0/dx[7]} {p_bo0/dx[8]} {p_bo0/dx[9]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe2]
+set_property port_width 10 [get_debug_ports u_ila_0/probe2]
+connect_debug_port u_ila_0/probe2 [get_nets [list {p_bo0/box_py[0]} {p_bo0/box_py[1]} {p_bo0/box_py[2]} {p_bo0/box_py[3]} {p_bo0/box_py[4]} {p_bo0/box_py[5]} {p_bo0/box_py[6]} {p_bo0/box_py[7]} {p_bo0/box_py[8]} {p_bo0/box_py[9]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe3]
+set_property port_width 10 [get_debug_ports u_ila_0/probe3]
+connect_debug_port u_ila_0/probe3 [get_nets [list {p_bo0/box_px[0]} {p_bo0/box_px[1]} {p_bo0/box_px[2]} {p_bo0/box_px[3]} {p_bo0/box_px[4]} {p_bo0/box_px[5]} {p_bo0/box_px[6]} {p_bo0/box_px[7]} {p_bo0/box_px[8]} {p_bo0/box_px[9]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe4]
+set_property port_width 1 [get_debug_ports u_ila_0/probe4]
+connect_debug_port u_ila_0/probe4 [get_nets [list p_bo0/wall_collision]]
+set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
+set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
+set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
+connect_debug_port dbg_hub/clk [get_nets clk_25MHZ]

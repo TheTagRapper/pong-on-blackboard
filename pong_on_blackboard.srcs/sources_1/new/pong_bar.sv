@@ -36,7 +36,7 @@ module pong_bar #(parameter PLAYER = 0) (
     
     
     logic [23:0] bg_color, box_color;
-    logic [7:0] box_width, box_height;
+    logic [7:0] bar_width, bar_height;
     logic [3:0] SWITCH_NUMBER;
     
     
@@ -44,7 +44,7 @@ module pong_bar #(parameter PLAYER = 0) (
     assign box_color = 24'hFFFFFF;
     assign bar_width = 32;
     assign bar_height = 64;
-    assign box_px = (PLAYER == 0 ? (16) : (592));
+    assign bar_px = (PLAYER == 0 ? (16) : (592));
     assign SWITCH_NUMBER = (PLAYER == 0 ? (11) : (0));
     
     
@@ -52,8 +52,8 @@ module pong_bar #(parameter PLAYER = 0) (
     always_comb
     begin
         // Rendering Box
-        if ( (px < bar_px + bar_width) && (px >= bar_px) && (py <= bar_py + bar_height) && (py >= bar_py) ) {bar_on} = {1'b1};
-        else {bar_on} = 1'b0; 
+        if ( (px <= bar_px + bar_width) && (px >= bar_px) && (py <= bar_py + bar_height) && (py >= bar_py) ) {bar_on} <= {1'b1};
+        else {bar_on} <= 1'b0; 
     
     end
     

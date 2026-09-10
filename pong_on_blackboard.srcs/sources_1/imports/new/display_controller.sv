@@ -125,7 +125,7 @@ module display_controller(
     begin
         if (bar_on_0 || bar_on_1) {red, green, blue} = 24'hFFFFFF;
         else if (box_on) {red, green, blue} = 24'h000000; 
-        {red, green, blue} = 24'h123456;
+        else {red, green, blue} = 24'h123456;
     end
 
     
