@@ -96,7 +96,10 @@ module display_controller(
     
     logic [7:0] r0, g0, b0;
     logic [7:0] r1, b1, g1;
+    
+    // Set frame / game speed
     logic [21:0] frame_divider;
+    
     
     always_ff @(posedge clk_25MHZ or negedge nReset)
     begin 
@@ -107,16 +110,22 @@ module display_controller(
     
     
     
-    logic box_on_0, box_on_1;
+    logic bar_on_0, bar_on_1, box_on;
+    logic p1_scored, p2_scored;
     
-    pong_bar #(.PLAYER(0)) pb0 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(nReset), .red(r0), .green(g0) , .blue(b0), .box_on(box_on_0), .frame_divider(frame_divider));
+    logic [9:0] p1_x, p1_y, p2_x, p2_y; 
     
-    pong_bar #(.PLAYER(1)) pb1 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(nReset), .red(r1), .green(g1) , .blue(b1), .box_on(box_on_1), .frame_divider(frame_divider));
+    pong_bar #(.PLAYER(0)) p_ba0 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(nReset), .bar_on(bar_on_0), .frame_divider(frame_divider), .bar_px(p1_x), .bar_py(p1_y));
+    
+    pong_bar #(.PLAYER(1)) p_ba1 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(nReset), .bar_on(bar_on_1), .frame_divider(frame_divider), .bar_px(p2_x), .bar_py(p2_y));
+
+    pong_box p_bo0 (.px(px), .py(py), .display_clock(clk_25MHZ), .nReset(nReset), .frame_divider(frame_divider), .p1_px(p1_x), .p1_py(p1_y), .p2_px(p2_x), .p2_py(p2_y), .box_on(box_on));
 
     always_comb
     begin
-        if (box_on_0) {red, green, blue} = {r0, g0, b0};
-        else {red, green, blue} = {r1, g1, b1};
+        if (bar_on_0 || bar_on_1) {red, green, blue} = 24'hFFFFFF;
+        else if (box_on) {red, green, blue} = 24'h000000; 
+        {red, green, blue} = 24'h123456;
     end
 
     

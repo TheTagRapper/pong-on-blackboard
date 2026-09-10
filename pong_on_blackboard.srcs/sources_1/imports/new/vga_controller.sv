@@ -33,7 +33,9 @@ module vga_controller(
     
     
     dual_counter dc0 (.nReset(nReset) , .clk(clk) , .a_val(a_val), .b_val(b_val), .en(en), .A(hsync), .B(vsync));
-
+    
+    
+    // Sync Regions
     assign video_active = (a_val > 15) && (a_val < 656) && (b_val > 9) && (b_val < 490);    
     
     always_ff @(posedge clk)
