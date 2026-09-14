@@ -64,15 +64,29 @@ module display_controller(
     assign led[9:0] = {locked, hsync, vsync, video_active, 1'b0,  3'b0, 1'b0, 1'b0};
     
     logic [7:0] red, green, blue;
-    
 
+
+    // 
+    logic [2:0] locked_sync;
+    always_ff @(posedge clk_25MHZ or negedge nReset)
+    begin
+        if (~nReset)
+            locked_sync <= 3'b000;
+        else
+            // Shift to ensure no metastability
+            locked_sync <= {locked_sync[1:0], locked};
+    end
+    
+    // locked is linked to reset state so have to ensure manual reset and locked agree
+    logic sys_nReset;
+    assign sys_nReset = nReset & locked_sync[2]; 
     
     
     hdmi_tx_0 hdmi_to_vga (
         .pix_clk(clk_25MHZ),
         .pix_clkx5(clk_125MHZ),
         .pix_clk_locked(locked),
-        .rst(~nReset),
+        .rst(~sys_nReset),
         .red(red),
         .green(green),
         .blue(blue),
@@ -101,9 +115,9 @@ module display_controller(
     logic [21:0] frame_divider;
     
     
-    always_ff @(posedge clk_25MHZ or negedge nReset)
+    always_ff @(posedge clk_25MHZ or negedge sys_nReset)
     begin 
-        if (~nReset) frame_divider <= 0;
+        if (~sys_nReset) frame_divider <= 0;
         else if ((frame_divider ==250000 )) frame_divider <= 0; 
         else frame_divider <= frame_divider + 1;  
     end
@@ -115,11 +129,11 @@ module display_controller(
     
     logic [9:0] p1_x, p1_y, p2_x, p2_y; 
     
-    pong_bar #(.PLAYER(0)) p_ba0 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(nReset), .bar_on(bar_on_0), .frame_divider(frame_divider), .bar_px(p1_x), .bar_py(p1_y));
+    pong_bar #(.PLAYER(0)) p_ba0 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(sys_nReset), .bar_on(bar_on_0), .frame_divider(frame_divider), .bar_px(p1_x), .bar_py(p1_y));
     
-    pong_bar #(.PLAYER(1)) p_ba1 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(nReset), .bar_on(bar_on_1), .frame_divider(frame_divider), .bar_px(p2_x), .bar_py(p2_y));
+    pong_bar #(.PLAYER(1)) p_ba1 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(sys_nReset), .bar_on(bar_on_1), .frame_divider(frame_divider), .bar_px(p2_x), .bar_py(p2_y));
 
-    pong_box p_bo0 (.px(px), .py(py), .display_clock(clk_25MHZ), .nReset(nReset), .frame_divider(frame_divider), .p1_px(p1_x), .p1_py(p1_y), .p2_px(p2_x), .p2_py(p2_y), .box_on(box_on));
+    pong_box p_bo0 (.px(px), .py(py), .display_clock(clk_25MHZ), .nReset(sys_nReset), .frame_divider(frame_divider), .p1_px(p1_x), .p1_py(p1_y), .p2_px(p2_x), .p2_py(p2_y), .box_on(box_on));
 
     always_comb
     begin
