@@ -55,11 +55,12 @@ module pong_box(
     end
     
     (* mark_debug = "true", keep = "true" *)
-    logic wall_collision;
+    logic hor_wall_collision, ver_wall_collision;
     logic p1_collision, p2_collision;
     
     
-    assign wall_collision = (((box_py > 480 - box_height)  || ((box_py == 0))));
+    assign hor_wall_collision = (((box_py > 480 - box_height)  || ((box_py == 0))));
+    assign ver_wall_collision = ((box_px > 640 - box_width) || (box_px == 0));
     assign p1_collision = ((box_px < p1_px + 32) && (box_py < p1_py + 64));
     assign p2_collision = ((box_px < p1_px + 32) && (box_py < p1_py + 64));
     
@@ -70,10 +71,11 @@ module pong_box(
     (* mark_debug = "true", keep = "true" *)
     logic [9:0] dx, dy;
     
-    logic pe_wc, pe_p1c, pe_p2c;
+    logic pe_hor_wc, pe_ver_wc, pe_p1c, pe_p2c;
 
     
-      pos_edge_det pe_wc_det (.sig(wall_collision), .clk(display_clock), .pe(pe_wc));
+      pos_edge_det pe_hor_wc_det (.sig(hor_wall_collision), .clk(display_clock), .pe(pe_hor_wc));
+      pos_edge_det pe_ver_wc_det (.sig(ver_wall_collision), .clk(display_clock), .pe(pe_ver_wc));
       pos_edge_det pe_p1c_det (.sig(p1_collision), .clk(display_clock), .pe(pe_p1c));
       pos_edge_det pe_p2c_det (.sig(p2_collision), .clk(display_clock), .pe(pe_p2c));
     
@@ -83,7 +85,8 @@ module pong_box(
         if (~nReset) {box_px, box_py, dx, dy} <= {10'd320, 10'd10, 10'd4, 10'd3};  
         else 
             begin  
-            if (pe_wc) dy <= ~dy + 1;
+            if (pe_hor_wc) dy <= ~dy + 1;
+            if (pe_ver_wc) dx <= ~dx + 1;
             if (pe_p1c || pe_p2c) dx <= ~dx + 1;
             if ((frame_divider == 250000))
                 begin

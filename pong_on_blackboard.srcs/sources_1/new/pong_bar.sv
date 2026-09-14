@@ -75,11 +75,11 @@ module pong_bar #(parameter PLAYER = 0) (
             begin
                 if (sw[SWITCH_NUMBER])
                     begin
-                        bar_py <= bar_py - 1;
+                        bar_py <= bar_py - 3;
                     end
                 else
                     begin
-                        bar_py <= bar_py + 1;                
+                        bar_py <= bar_py + 3;                
                     end 
             end
          end
