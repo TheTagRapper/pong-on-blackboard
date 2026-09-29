@@ -2,7 +2,7 @@
 // Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
-// Date        : Sun Aug  2 13:42:36 2026
+// Date        : Wed Sep 23 11:49:25 2026
 // Host        : pyra-pargat-linuxmint running 64-bit Linux Mint 22.3
 // Command     : write_verilog -force -mode synth_stub {/home/pyra/Documents/Personal
 //               Projects/pong-on-blackboard/pong_on_blackboard.gen/sources_1/ip/hdmi_tx_0/hdmi_tx_0_stub.v}
@@ -17,9 +17,8 @@
 (* CHECK_LICENSE_TYPE = "hdmi_tx_0,hdmi_tx_v1_0,{}" *) (* DowngradeIPIdentifiedWarnings = "yes" *) (* IP_DEFINITION_SOURCE = "package_project" *) 
 (* X_CORE_INFO = "hdmi_tx_v1_0,Vivado 2025.2" *) 
 module hdmi_tx_0(pix_clk, pix_clkx5, pix_clk_locked, rst, red, 
-  green, blue, hsync, vsync, vde, aux0_din, aux1_din, aux2_din, ade, TMDS_CLK_P, TMDS_CLK_N, TMDS_DATA_P, 
-  TMDS_DATA_N)
-/* synthesis syn_black_box black_box_pad_pin="pix_clk_locked,rst,red[7:0],green[7:0],blue[7:0],hsync,vsync,vde,aux0_din[3:0],aux1_din[3:0],aux2_din[3:0],ade,TMDS_CLK_P,TMDS_CLK_N,TMDS_DATA_P[2:0],TMDS_DATA_N[2:0]" */
+  green, blue, hsync, vsync, vde, TMDS_CLK_P, TMDS_CLK_N, TMDS_DATA_P, TMDS_DATA_N)
+/* synthesis syn_black_box black_box_pad_pin="pix_clk_locked,rst,red[7:0],green[7:0],blue[7:0],hsync,vsync,vde,TMDS_CLK_P,TMDS_CLK_N,TMDS_DATA_P[2:0],TMDS_DATA_N[2:0]" */
 /* synthesis syn_force_seq_prim="pix_clk" */
 /* synthesis syn_force_seq_prim="pix_clkx5" */;
   (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 pix_clk CLK" *) (* X_INTERFACE_MODE = "slave" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME pix_clk, FREQ_HZ 100000000, FREQ_TOLERANCE_HZ 0, PHASE 0.0, INSERT_VIP 0" *) input pix_clk /* synthesis syn_isclock = 1 */;
@@ -32,10 +31,6 @@ module hdmi_tx_0(pix_clk, pix_clkx5, pix_clk_locked, rst, red,
   input hsync;
   input vsync;
   input vde;
-  input [3:0]aux0_din;
-  input [3:0]aux1_din;
-  input [3:0]aux2_din;
-  input ade;
   (* X_INTERFACE_INFO = "xilinx.com:interface:hdmi:2.0 hdmi_tx TMDS_CLK_P" *) (* X_INTERFACE_MODE = "master" *) output TMDS_CLK_P;
   (* X_INTERFACE_INFO = "xilinx.com:interface:hdmi:2.0 hdmi_tx TMDS_CLK_N" *) output TMDS_CLK_N;
   (* X_INTERFACE_INFO = "xilinx.com:interface:hdmi:2.0 hdmi_tx TMDS_DATA_P" *) output [2:0]TMDS_DATA_P;

@@ -21,7 +21,7 @@
 
 
 module pong_box(
-        input logic [9:0] px, py,
+        input logic [11:0] px, py,
         input logic [11:0] sw,
         input logic display_clock,
         input logic nReset,
@@ -34,7 +34,7 @@ module pong_box(
     );
     
     (* mark_debug = "true", keep = "true" *)
-    logic [9:0] box_px, box_py; // Does top left
+    logic [11:0] box_px, box_py; // Does top left
     logic [7:0] box_width, box_height;
     logic [3:0] SWITCH_NUMBER;
     
@@ -55,14 +55,17 @@ module pong_box(
     end
     
     (* mark_debug = "true", keep = "true" *)
-    logic hor_wall_collision, ver_wall_collision;
+    logic hor_wall_collision;
+    
+    (* mark_debug = "true", keep = "true" *)
+    logic ver_wall_collision;
     logic p1_collision, p2_collision;
     
     
-    assign hor_wall_collision = (((box_py > 480 - box_height)  || ((box_py == 0))));
-    assign ver_wall_collision = ((box_px > 640 - box_width) || (box_px == 0));
+    assign hor_wall_collision = (((box_py > 1080 - box_height)  || ((box_py == 0))));
+    assign ver_wall_collision = ((box_px > 1920 - box_width) || (box_px == 0));
     assign p1_collision = ((box_px < p1_px + 32) && (box_py < p1_py + 64));
-    assign p2_collision = ((box_px < p1_px + 32) && (box_py < p1_py + 64));
+    assign p2_collision = ((box_px < p2_px + 32) && (box_py < p2_py + 64));
     
     assign p1_scored = p1_collision;
     assign p2_scored = p2_collision;

@@ -146,5 +146,3 @@ set_property -dict {PACKAGE_PIN N18 IOSTANDARD TMDS_33} [get_ports {hdmi_tx_p[2]
 #set_property -dict { PACKAGE_PIN G14   IOSTANDARD LVCMOS33 } [get_ports servo[2]]; #IO_0_35 Sch=SERVO3
 #set_property -dict { PACKAGE_PIN M19   IOSTANDARD LVCMOS33 } [get_ports servo[3]]; #IO_L7P_T1_AD2P_35 Sch=SERVO4
 
-
-

@@ -2,7 +2,7 @@
 -- Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
--- Date        : Sun Aug  2 13:42:36 2026
+-- Date        : Wed Sep 23 11:49:25 2026
 -- Host        : pyra-pargat-linuxmint running 64-bit Linux Mint 22.3
 -- Command     : write_vhdl -force -mode synth_stub {/home/pyra/Documents/Personal
 --               Projects/pong-on-blackboard/pong_on_blackboard.gen/sources_1/ip/hdmi_tx_0/hdmi_tx_0_stub.vhdl}
@@ -25,10 +25,6 @@ entity hdmi_tx_0 is
     hsync : in STD_LOGIC;
     vsync : in STD_LOGIC;
     vde : in STD_LOGIC;
-    aux0_din : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    aux1_din : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    aux2_din : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    ade : in STD_LOGIC;
     TMDS_CLK_P : out STD_LOGIC;
     TMDS_CLK_N : out STD_LOGIC;
     TMDS_DATA_P : out STD_LOGIC_VECTOR ( 2 downto 0 );
@@ -47,7 +43,7 @@ architecture stub of hdmi_tx_0 is
   attribute syn_black_box : boolean;
   attribute black_box_pad_pin : string;
   attribute syn_black_box of stub : architecture is true;
-  attribute black_box_pad_pin of stub : architecture is "pix_clk,pix_clkx5,pix_clk_locked,rst,red[7:0],green[7:0],blue[7:0],hsync,vsync,vde,aux0_din[3:0],aux1_din[3:0],aux2_din[3:0],ade,TMDS_CLK_P,TMDS_CLK_N,TMDS_DATA_P[2:0],TMDS_DATA_N[2:0]";
+  attribute black_box_pad_pin of stub : architecture is "pix_clk,pix_clkx5,pix_clk_locked,rst,red[7:0],green[7:0],blue[7:0],hsync,vsync,vde,TMDS_CLK_P,TMDS_CLK_N,TMDS_DATA_P[2:0],TMDS_DATA_N[2:0]";
   attribute X_INTERFACE_INFO : string;
   attribute X_INTERFACE_INFO of pix_clk : signal is "xilinx.com:signal:clock:1.0 pix_clk CLK";
   attribute X_INTERFACE_MODE : string;

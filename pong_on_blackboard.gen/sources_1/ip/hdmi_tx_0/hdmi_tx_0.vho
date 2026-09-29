@@ -63,10 +63,6 @@ COMPONENT hdmi_tx_0
     hsync : IN STD_LOGIC;
     vsync : IN STD_LOGIC;
     vde : IN STD_LOGIC;
-    aux0_din : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-    aux1_din : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-    aux2_din : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-    ade : IN STD_LOGIC;
     TMDS_CLK_P : OUT STD_LOGIC;
     TMDS_CLK_N : OUT STD_LOGIC;
     TMDS_DATA_P : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -91,10 +87,6 @@ your_instance_name : hdmi_tx_0
     hsync => hsync,
     vsync => vsync,
     vde => vde,
-    aux0_din => aux0_din,
-    aux1_din => aux1_din,
-    aux2_din => aux2_din,
-    ade => ade,
     TMDS_CLK_P => TMDS_CLK_P,
     TMDS_CLK_N => TMDS_CLK_N,
     TMDS_DATA_P => TMDS_DATA_P,

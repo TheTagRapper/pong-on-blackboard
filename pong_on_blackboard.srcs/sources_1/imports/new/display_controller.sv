@@ -40,11 +40,22 @@ module display_controller(
     
     
     
+    
 //    assign hdmi_out_en = 1'b1;
     
-    logic nReset;
+    logic btn0_debounced;
     
-    assign nReset = ~btn[0];
+    debouncer #(
+        .CLK_FREQ_HZ(100_000_000),  // adjust to your actual board clk
+        .DEBOUNCE_MS(10)
+    ) reset_debounce (
+        .clk(clk),
+        .btn_in(btn[0]),
+        .btn_out(btn0_debounced)
+    );
+    
+    logic nReset;
+    assign nReset = ~btn0_debounced;
     
     logic clk_25MHZ;
     logic clk_125MHZ;
@@ -52,13 +63,54 @@ module display_controller(
     logic locked;
     logic hsync, vsync, video_active;
     
-    logic [9:0] px, py;
+    
+    (* mark_debug = "true", keep = "true" *) 
+    logic [11:0] px;
+    
+    (* mark_debug = "true", keep = "true" *) 
+    logic [11:0] py;
+    
+
+    // ---CLAUDE-- //
+    logic locked_sync;
+    always_ff @(posedge clk or negedge nReset)
+    begin
+        if (~nReset) locked_sync <= 1'b0;
+        else locked_sync <= locked;
+    end
+    
+    logic [15:0] lock_settle_count;
+    logic lock_settled;
+    always_ff @(posedge clk or negedge nReset)
+    begin
+        if (~nReset) begin
+            lock_settle_count <= 0;
+            lock_settled <= 0;
+        end else if (!locked_sync) begin
+            lock_settle_count <= 0;
+            lock_settled <= 0;
+        end else if (lock_settle_count == 16'hFFFF) begin
+            lock_settled <= 1;
+        end else begin
+            lock_settle_count <= lock_settle_count + 1;
+        end
+    end
+    
+    assign sys_nReset = nReset & lock_settled;
+
+    // --CLAUDE--//
+    // Try to remove above if 1920x1080 working now?
+    
+
+    
     
     clk_wiz_0 cw0 (.clk_in1(clk) , .clk_out1(clk_25MHZ), .locked(locked),
                    .clk_out2(clk_125MHZ), .reset(~nReset));
     
     
-    vga_controller vga_c (.clk(clk_25MHZ), .nReset(nReset), .hsync(hsync), .vsync(vsync), .video_active(video_active), .px(px), .py(py));
+
+    
+    vga_controller vga_c (.clk(clk_25MHZ), .nReset(sys_nReset), .hsync(hsync), .vsync(vsync), .video_active(video_active), .px(px), .py(py));
     
     
     assign led[9:0] = {locked, hsync, vsync, video_active, 1'b0,  3'b0, 1'b0, 1'b0};
@@ -66,38 +118,32 @@ module display_controller(
     logic [7:0] red, green, blue;
 
 
-    // 
-    logic [2:0] locked_sync;
-    always_ff @(posedge clk_25MHZ or negedge nReset)
+    // Re-synchronize sys_nReset into the pix_clk (clk_25MHZ) domain specifically
+    // for the OSERDESE2 reset requirement (deassertion must be sync to CLKDIV)
+    logic [2:0] hdmi_rst_sync;
+    always_ff @(posedge clk_25MHZ or negedge sys_nReset)
     begin
-        if (~nReset)
-            locked_sync <= 3'b000;
+        if (~sys_nReset)
+            hdmi_rst_sync <= 3'b111;
         else
-            // Shift to ensure no metastability
-            locked_sync <= {locked_sync[1:0], locked};
+            hdmi_rst_sync <= {hdmi_rst_sync[1:0], 1'b0};
     end
     
-    // locked is linked to reset state so have to ensure manual reset and locked agree
-    logic sys_nReset;
-    assign sys_nReset = nReset & locked_sync[2]; 
-    
+    logic hdmi_rst;
+    assign hdmi_rst = hdmi_rst_sync[2];
+
     
     hdmi_tx_0 hdmi_to_vga (
         .pix_clk(clk_25MHZ),
         .pix_clkx5(clk_125MHZ),
         .pix_clk_locked(locked),
-        .rst(~sys_nReset),
+        .rst(hdmi_rst),
         .red(red),
         .green(green),
         .blue(blue),
         .hsync(hsync),
         .vsync(vsync),
         .vde(video_active),
-        
-        .aux0_din(4'b0),              
-      .aux1_din(4'b0),              
-      .aux2_din(4'b0),              
-      .ade(1'b0),
       
       // Differential outputs
       .TMDS_CLK_P(hdmi_clk_p),          
@@ -127,7 +173,8 @@ module display_controller(
     logic bar_on_0, bar_on_1, box_on;
     logic p1_scored, p2_scored;
     
-    logic [9:0] p1_x, p1_y, p2_x, p2_y; 
+    logic [11:0] p1_x, p2_x;
+    logic [11:0] p1_y, p2_y; 
     
     pong_bar #(.PLAYER(0)) p_ba0 (.px(px), .py(py), .sw(sw[11:0]) , .display_clock(clk_25MHZ), .nReset(sys_nReset), .bar_on(bar_on_0), .frame_divider(frame_divider), .bar_px(p1_x), .bar_py(p1_y));
     
@@ -135,12 +182,21 @@ module display_controller(
 
     pong_box p_bo0 (.px(px), .py(py), .display_clock(clk_25MHZ), .nReset(sys_nReset), .frame_divider(frame_divider), .p1_px(p1_x), .p1_py(p1_y), .p2_px(p2_x), .p2_py(p2_y), .box_on(box_on));
 
+    
     always_comb
     begin
         if (bar_on_0 || bar_on_1) {red, green, blue} = 24'hFFFFFF;
         else if (box_on) {red, green, blue} = 24'h000000; 
         else {red, green, blue} = 24'h123456;
     end
-
+    
+    
+    /*
+    always_comb
+    begin
+        if (py[5]) {red, green, blue} = 24'hFFFFFF;
+        else {red, green, blue} = 24'h000000;
+    end
+    */
     
 endmodule

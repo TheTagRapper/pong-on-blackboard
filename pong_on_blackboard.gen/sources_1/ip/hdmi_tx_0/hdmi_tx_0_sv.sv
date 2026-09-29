@@ -74,14 +74,6 @@ module hdmi_tx_0_sv (
   (* X_INTERFACE_IGNORE = "true" *)
   input wire vde,
   (* X_INTERFACE_IGNORE = "true" *)
-  input wire [3:0] aux0_din,
-  (* X_INTERFACE_IGNORE = "true" *)
-  input wire [3:0] aux1_din,
-  (* X_INTERFACE_IGNORE = "true" *)
-  input wire [3:0] aux2_din,
-  (* X_INTERFACE_IGNORE = "true" *)
-  input wire ade,
-  (* X_INTERFACE_IGNORE = "true" *)
   output wire TMDS_CLK_P,
   (* X_INTERFACE_IGNORE = "true" *)
   output wire TMDS_CLK_N,
@@ -102,10 +94,6 @@ module hdmi_tx_0_sv (
     .hsync(hsync),
     .vsync(vsync),
     .vde(vde),
-    .aux0_din(aux0_din),
-    .aux1_din(aux1_din),
-    .aux2_din(aux2_din),
-    .ade(ade),
     .TMDS_CLK_P(TMDS_CLK_P),
     .TMDS_CLK_N(TMDS_CLK_N),
     .TMDS_DATA_P(TMDS_DATA_P),

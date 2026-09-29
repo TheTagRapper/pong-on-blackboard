@@ -21,7 +21,8 @@
 
 
 module pong_bar #(parameter PLAYER = 0) (
-        input logic [9:0] px, py,
+        input logic [11:0] px,
+        input logic [11:0] py,
         input logic [11:0] sw,
         input logic display_clock,
         input logic [21:0] frame_divider,
@@ -44,7 +45,7 @@ module pong_bar #(parameter PLAYER = 0) (
     assign box_color = 24'hFFFFFF;
     assign bar_width = 32;
     assign bar_height = 64;
-    assign bar_px = (PLAYER == 0 ? (16) : (592));
+    assign bar_px = (PLAYER == 0 ? (16) : (1904));
     assign SWITCH_NUMBER = (PLAYER == 0 ? (11) : (0));
     
     
@@ -60,7 +61,7 @@ module pong_bar #(parameter PLAYER = 0) (
     
     logic out_of_bounds;
     
-    assign out_of_bounds = (((bar_py > 480 - bar_height) && (sw[SWITCH_NUMBER] == 0)) || ((bar_py == 0) && (sw[SWITCH_NUMBER] == 1)));
+    assign out_of_bounds = (((bar_py > 1080 - bar_height) && (sw[SWITCH_NUMBER] == 0)) || ((bar_py == 0) && (sw[SWITCH_NUMBER] == 1)));
         
     // Controls how the speed works
     

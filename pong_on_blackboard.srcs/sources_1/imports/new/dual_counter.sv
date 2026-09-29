@@ -23,7 +23,7 @@
 module dual_counter(
         input logic nReset, 
         input logic clk,
-        output [9:0] a_val, b_val,
+        output logic [10:0] a_val, b_val,
         input en,
         //(* mark_debug = "true", keep = "true" *)
         output logic A, B
@@ -32,14 +32,13 @@ module dual_counter(
     logic clk_b;
     logic a_en, b_en;
     
-    logic [9:0] a_val, b_val;
     
         
     
-    // Up to 823 (I assume this is for HSync?)
+	// Count through entire Horizontal
     bin_counter #(
-        .MAX_COUNT(800), 
-        .WIDTH(10)
+        .MAX_COUNT(2200), 
+        .WIDTH(11)
     )
     counter_A(
         .nReset(nReset),
@@ -48,10 +47,10 @@ module dual_counter(
         .val(a_val)
     );
     
-    // Up to 600 (I assume for VSync)
+    // Count through entire Vertical
     bin_counter #(
-            .MAX_COUNT(525),
-            .WIDTH(10)
+            .MAX_COUNT(1125),
+            .WIDTH(11)
     ) 
     counter_B( 
             .nReset(nReset),
@@ -62,14 +61,14 @@ module dual_counter(
     
     assign a_en = en;
     
-    assign b_en = (a_val==800); // Triggers on A limit reach
+    assign b_en = (a_val==2200); // Triggers on A limit reach
     
     
     // Front Porch | Video | SYNC | Back Porch
     
     // HSYNC 
-    assign A = ~((a_val >= 656) && (a_val < 752));
+    assign A = ~((a_val >= 2008) && (a_val < 2052));
     
     // VSYNC
-    assign B = ~((b_val >= 490) && (b_val < 492));    
+    assign B = ~((b_val >= 1084) && (b_val < 1089));    
 endmodule
