@@ -37,7 +37,7 @@ module vga_controller(
     
     
     // Video Active Regions
-    assign video_active = (a_val >= 88) && (a_val < 2008) && (b_val >= 4) && (b_val < 10);    
+    assign video_active = (a_val >= 88) && (a_val < 2008) && (b_val >= 4) && (b_val < 1084);    
     
     always_ff @(posedge clk or negedge nReset)
     begin

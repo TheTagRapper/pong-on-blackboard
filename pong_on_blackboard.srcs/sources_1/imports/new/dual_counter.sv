@@ -23,7 +23,8 @@
 module dual_counter(
         input logic nReset, 
         input logic clk,
-        output logic [10:0] a_val, b_val,
+        (* mark_debug = "true", keep = "true" *)
+        output logic [11:0] a_val, b_val,
         input en,
         //(* mark_debug = "true", keep = "true" *)
         output logic A, B
@@ -38,7 +39,7 @@ module dual_counter(
 	// Count through entire Horizontal
     bin_counter #(
         .MAX_COUNT(2200), 
-        .WIDTH(11)
+        .WIDTH(12)
     )
     counter_A(
         .nReset(nReset),
@@ -49,8 +50,8 @@ module dual_counter(
     
     // Count through entire Vertical
     bin_counter #(
-            .MAX_COUNT(1125),
-            .WIDTH(11)
+            .MAX_COUNT(1126),
+            .WIDTH(12)
     ) 
     counter_B( 
             .nReset(nReset),

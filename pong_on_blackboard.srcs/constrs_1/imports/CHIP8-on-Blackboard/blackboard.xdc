@@ -146,3 +146,66 @@ set_property -dict {PACKAGE_PIN N18 IOSTANDARD TMDS_33} [get_ports {hdmi_tx_p[2]
 #set_property -dict { PACKAGE_PIN G14   IOSTANDARD LVCMOS33 } [get_ports servo[2]]; #IO_0_35 Sch=SERVO3
 #set_property -dict { PACKAGE_PIN M19   IOSTANDARD LVCMOS33 } [get_ports servo[3]]; #IO_L7P_T1_AD2P_35 Sch=SERVO4
 
+
+create_debug_core u_ila_0 ila
+set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
+set_property ALL_PROBE_SAME_MU_CNT 2 [get_debug_cores u_ila_0]
+set_property C_ADV_TRIGGER false [get_debug_cores u_ila_0]
+set_property C_DATA_DEPTH 1024 [get_debug_cores u_ila_0]
+set_property C_EN_STRG_QUAL true [get_debug_cores u_ila_0]
+set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0]
+set_property C_TRIGIN_EN false [get_debug_cores u_ila_0]
+set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0]
+set_property port_width 1 [get_debug_ports u_ila_0/clk]
+connect_debug_port u_ila_0/clk [get_nets [list cw0/inst/clk_out1]]
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe0]
+set_property port_width 12 [get_debug_ports u_ila_0/probe0]
+connect_debug_port u_ila_0/probe0 [get_nets [list {p_bo0/box_px[0]} {p_bo0/box_px[1]} {p_bo0/box_px[2]} {p_bo0/box_px[3]} {p_bo0/box_px[4]} {p_bo0/box_px[5]} {p_bo0/box_px[6]} {p_bo0/box_px[7]} {p_bo0/box_px[8]} {p_bo0/box_px[9]} {p_bo0/box_px[10]} {p_bo0/box_px[11]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe1]
+set_property port_width 12 [get_debug_ports u_ila_0/probe1]
+connect_debug_port u_ila_0/probe1 [get_nets [list {p_bo0/box_py[0]} {p_bo0/box_py[1]} {p_bo0/box_py[2]} {p_bo0/box_py[3]} {p_bo0/box_py[4]} {p_bo0/box_py[5]} {p_bo0/box_py[6]} {p_bo0/box_py[7]} {p_bo0/box_py[8]} {p_bo0/box_py[9]} {p_bo0/box_py[10]} {p_bo0/box_py[11]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe2]
+set_property port_width 10 [get_debug_ports u_ila_0/probe2]
+connect_debug_port u_ila_0/probe2 [get_nets [list {p_bo0/dx[0]} {p_bo0/dx[1]} {p_bo0/dx[2]} {p_bo0/dx[3]} {p_bo0/dx[4]} {p_bo0/dx[5]} {p_bo0/dx[6]} {p_bo0/dx[7]} {p_bo0/dx[8]} {p_bo0/dx[9]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe3]
+set_property port_width 10 [get_debug_ports u_ila_0/probe3]
+connect_debug_port u_ila_0/probe3 [get_nets [list {p_bo0/dy[0]} {p_bo0/dy[1]} {p_bo0/dy[2]} {p_bo0/dy[3]} {p_bo0/dy[4]} {p_bo0/dy[5]} {p_bo0/dy[6]} {p_bo0/dy[7]} {p_bo0/dy[8]} {p_bo0/dy[9]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe4]
+set_property port_width 11 [get_debug_ports u_ila_0/probe4]
+connect_debug_port u_ila_0/probe4 [get_nets [list {vga_c/dc0/a_val[0]} {vga_c/dc0/a_val[1]} {vga_c/dc0/a_val[2]} {vga_c/dc0/a_val[3]} {vga_c/dc0/a_val[4]} {vga_c/dc0/a_val[5]} {vga_c/dc0/a_val[6]} {vga_c/dc0/a_val[7]} {vga_c/dc0/a_val[8]} {vga_c/dc0/a_val[9]} {vga_c/dc0/a_val[10]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe5]
+set_property port_width 11 [get_debug_ports u_ila_0/probe5]
+connect_debug_port u_ila_0/probe5 [get_nets [list {vga_c/dc0/b_val[0]} {vga_c/dc0/b_val[1]} {vga_c/dc0/b_val[2]} {vga_c/dc0/b_val[3]} {vga_c/dc0/b_val[4]} {vga_c/dc0/b_val[5]} {vga_c/dc0/b_val[6]} {vga_c/dc0/b_val[7]} {vga_c/dc0/b_val[8]} {vga_c/dc0/b_val[9]} {vga_c/dc0/b_val[10]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe6]
+set_property port_width 12 [get_debug_ports u_ila_0/probe6]
+connect_debug_port u_ila_0/probe6 [get_nets [list {vga_c/a_val[0]} {vga_c/a_val[1]} {vga_c/a_val[2]} {vga_c/a_val[3]} {vga_c/a_val[4]} {vga_c/a_val[5]} {vga_c/a_val[6]} {vga_c/a_val[7]} {vga_c/a_val[8]} {vga_c/a_val[9]} {vga_c/a_val[10]} {vga_c/a_val[11]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe7]
+set_property port_width 12 [get_debug_ports u_ila_0/probe7]
+connect_debug_port u_ila_0/probe7 [get_nets [list {vga_c/b_val[0]} {vga_c/b_val[1]} {vga_c/b_val[2]} {vga_c/b_val[3]} {vga_c/b_val[4]} {vga_c/b_val[5]} {vga_c/b_val[6]} {vga_c/b_val[7]} {vga_c/b_val[8]} {vga_c/b_val[9]} {vga_c/b_val[10]} {vga_c/b_val[11]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe8]
+set_property port_width 12 [get_debug_ports u_ila_0/probe8]
+connect_debug_port u_ila_0/probe8 [get_nets [list {px[0]} {px[1]} {px[2]} {px[3]} {px[4]} {px[5]} {px[6]} {px[7]} {px[8]} {px[9]} {px[10]} {px[11]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe9]
+set_property port_width 12 [get_debug_ports u_ila_0/probe9]
+connect_debug_port u_ila_0/probe9 [get_nets [list {py[0]} {py[1]} {py[2]} {py[3]} {py[4]} {py[5]} {py[6]} {py[7]} {py[8]} {py[9]} {py[10]} {py[11]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe10]
+set_property port_width 1 [get_debug_ports u_ila_0/probe10]
+connect_debug_port u_ila_0/probe10 [get_nets [list p_bo0/hor_wall_collision]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe11]
+set_property port_width 1 [get_debug_ports u_ila_0/probe11]
+connect_debug_port u_ila_0/probe11 [get_nets [list p_bo0/ver_wall_collision]]
+set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
+set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
+set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
+connect_debug_port dbg_hub/clk [get_nets clk_25MHZ]
