@@ -62,8 +62,8 @@ module pong_box(
     logic p1_collision, p2_collision;
     
     
-    assign hor_wall_collision = (((box_py > 1080 - box_height)  || ((box_py == 0))));
-    assign ver_wall_collision = ((box_px > 1920 - box_width) || (box_px == 0));
+    assign hor_wall_collision = (((box_py > 720 - box_height)  || ((box_py == 0))));
+    assign ver_wall_collision = ((box_px > 1280 - box_width) || (box_px == 0));
     assign p1_collision = ((box_px < p1_px + 32) && (box_py < p1_py + 64));
     assign p2_collision = ((box_px < p2_px + 32) && (box_py < p2_py + 64));
     
@@ -85,7 +85,7 @@ module pong_box(
     always_ff @(posedge display_clock or negedge nReset)
     begin
         // reset display
-        if (~nReset) {box_px, box_py, dx, dy} <= {10'd320, 10'd10, 10'd4, 10'd3};  
+        if (~nReset) {box_px, box_py, dx, dy} <= {12'd640, 12'd10, 12'd4, 12'd3};  
         else 
             begin  
             if (pe_hor_wc) dy <= ~dy + 1;

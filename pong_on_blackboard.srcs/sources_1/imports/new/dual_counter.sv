@@ -38,7 +38,7 @@ module dual_counter(
     
 	// Count through entire Horizontal
     bin_counter #(
-        .MAX_COUNT(2200), 
+        .MAX_COUNT(1650), 
         .WIDTH(12)
     )
     counter_A(
@@ -50,7 +50,7 @@ module dual_counter(
     
     // Count through entire Vertical
     bin_counter #(
-            .MAX_COUNT(1126),
+            .MAX_COUNT(750),
             .WIDTH(12)
     ) 
     counter_B( 
@@ -62,14 +62,14 @@ module dual_counter(
     
     assign a_en = en;
     
-    assign b_en = (a_val==2200); // Triggers on A limit reach
+    assign b_en = (a_val==1649); // Triggers on A limit reach
     
     
     // Front Porch | Video | SYNC | Back Porch
     
     // HSYNC 
-    assign A = ~((a_val >= 2008) && (a_val < 2052));
+    assign A = ((a_val >= 1390) && (a_val < 1430));
     
     // VSYNC
-    assign B = ~((b_val >= 1084) && (b_val < 1089));    
+    assign B = ((b_val >= 725) && (b_val < 730));    
 endmodule

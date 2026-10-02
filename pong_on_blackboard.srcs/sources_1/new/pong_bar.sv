@@ -28,7 +28,7 @@ module pong_bar #(parameter PLAYER = 0) (
         input logic [21:0] frame_divider,
         
         input logic nReset,
-        output logic [9:0] bar_px, bar_py,
+        output logic [11:0] bar_px, bar_py,
 
         output logic bar_on
     );
@@ -45,7 +45,7 @@ module pong_bar #(parameter PLAYER = 0) (
     assign box_color = 24'hFFFFFF;
     assign bar_width = 32;
     assign bar_height = 64;
-    assign bar_px = (PLAYER == 0 ? (16) : (1904));
+    assign bar_px = (PLAYER == 0 ? (12'd16) : (12'd1232));
     assign SWITCH_NUMBER = (PLAYER == 0 ? (11) : (0));
     
     
@@ -61,14 +61,14 @@ module pong_bar #(parameter PLAYER = 0) (
     
     logic out_of_bounds;
     
-    assign out_of_bounds = (((bar_py > 1080 - bar_height) && (sw[SWITCH_NUMBER] == 0)) || ((bar_py == 0) && (sw[SWITCH_NUMBER] == 1)));
+    assign out_of_bounds = (((bar_py > 720 - bar_height) && (sw[SWITCH_NUMBER] == 0)) || ((bar_py < 3) && (sw[SWITCH_NUMBER] == 1)));
         
     // Controls how the speed works
     
     always_ff @(posedge display_clock or negedge nReset)
     begin
         // reset display
-        if (~nReset) {bar_py} <= 10'd0;    
+        if (~nReset) {bar_py} <= 12'd0;    
     
         else if ((frame_divider == 250000)) begin
             // Moving pong box

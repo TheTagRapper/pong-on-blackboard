@@ -32,12 +32,14 @@ module vga_controller(
     
     assign en = 1'b1;
     
+    logic video_active_presync, hsync_presync, vsync_presync;
+
     
-    dual_counter dc0 (.nReset(nReset) , .clk(clk) , .a_val(a_val), .b_val(b_val), .en(en), .A(hsync), .B(vsync));
+    dual_counter dc0 (.nReset(nReset) , .clk(clk) , .a_val(a_val), .b_val(b_val), .en(en), .A(hsync_presync), .B(vsync_presync));
     
     
     // Video Active Regions
-    assign video_active = (a_val >= 88) && (a_val < 2008) && (b_val >= 4) && (b_val < 1084);    
+    assign video_active_presync = (a_val < 1280) && (b_val < 720);    
     
     always_ff @(posedge clk or negedge nReset)
     begin
@@ -45,14 +47,25 @@ module vga_controller(
         begin
             px <= 0;
             py <= 0;
+            hsync <= 1'b0;
+            vsync <= 1'b0;
+            video_active <= 1'b0;
         end
         else 
         begin
+            hsync <= hsync_presync;
+            vsync <= vsync_presync;
+            video_active <= video_active_presync;
             if (video_active)
             	begin
-            	 px <= a_val - 81;
-            	 py <= b_val - 3;
+            	 px <= a_val;
+            	 py <= b_val;
             	end
+            else
+                begin
+                    px <= 0;
+                    py <= 0;
+                end
         end
    end
     
