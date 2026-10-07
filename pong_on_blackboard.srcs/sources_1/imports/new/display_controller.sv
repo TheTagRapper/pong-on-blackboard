@@ -62,10 +62,8 @@ module display_controller(
     logic hsync, vsync, video_active;
     
     
-    (* mark_debug = "true", keep = "true" *) 
     logic [11:0] px;
     
-    (* mark_debug = "true", keep = "true" *) 
     logic [11:0] py;
     
 
@@ -191,15 +189,16 @@ module display_controller(
     always_ff @(posedge px_clk or negedge game_nReset)
     begin 
         if (~game_nReset) frame_divider <= 0;
-        else if ((frame_divider ==250000 )) frame_divider <= 0; 
+        else if ((frame_divider == 2504177 )) frame_divider <= 0; 
         else frame_divider <= frame_divider + 1;  
     end
-    
     
     
     logic bar_on_0, bar_on_1, box_on;
     logic p1_scored, p2_scored;
     
+    
+    (* mark_debug = "true", keep = "true" *)
     logic [11:0] p1_x, p2_x;
     logic [11:0] p1_y, p2_y; 
     

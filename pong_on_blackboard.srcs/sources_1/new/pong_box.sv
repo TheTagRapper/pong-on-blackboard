@@ -27,7 +27,9 @@ module pong_box(
         input logic nReset,
         input logic [21:0] frame_divider,
         
-        input logic [9:0] p1_px, p1_py, p2_px, p2_py,
+        input logic [11:0] p1_px, p2_px,
+        
+        input logic [11:0] p1_py, p2_py,
         
         output logic p1_scored, p2_scored,
         output logic box_on
@@ -50,7 +52,7 @@ module pong_box(
     always_comb
     begin
         // Rendering Box
-        if ( (px < box_px + box_width) && (px >= box_px) && (py <= box_py + box_height) && (py >= box_py) ) {box_on} = {1'b1};    
+        if ( (px <= box_px + box_width) && (px >= box_px) && (py <= box_py + box_height) && (py >= box_py) ) {box_on} = {1'b1};    
         else {box_on} = {1'b0};
     end
     
@@ -59,43 +61,50 @@ module pong_box(
     
     (* mark_debug = "true", keep = "true" *)
     logic ver_wall_collision;
+    
+    (* mark_debug = "true", keep = "true" *)
+
     logic p1_collision, p2_collision;
     
     
-    assign hor_wall_collision = (((box_py > 720 - box_height)  || ((box_py == 0))));
-    assign ver_wall_collision = ((box_px > 1280 - box_width) || (box_px == 0));
-    assign p1_collision = ((box_px < p1_px + 32) && (box_py < p1_py + 64));
-    assign p2_collision = ((box_px < p2_px + 32) && (box_py < p2_py + 64));
+    assign hor_wall_collision = (((box_py >= 704)  || ((box_py == 0))));
+    assign ver_wall_collision = ((box_px >= 1264 ) || (box_px == 0));
+    assign p1_collision = ((box_px <= p1_px + 32)  && (box_py <= p1_py + 64) && (box_py >= p1_py) ) ;
+    assign p2_collision = ((box_px >= p2_px - 16) && (box_py <= p2_py + 64) && (box_py >= p2_py) );
     
     assign p1_scored = p1_collision;
     assign p2_scored = p2_collision;
     
     // Controls how the speed works
     (* mark_debug = "true", keep = "true" *)
-    logic [9:0] dx, dy;
-    
-    logic pe_hor_wc, pe_ver_wc, pe_p1c, pe_p2c;
+    logic [11:0] dx, dy;
+        
 
-    
-      pos_edge_det pe_hor_wc_det (.sig(hor_wall_collision), .clk(display_clock), .pe(pe_hor_wc));
-      pos_edge_det pe_ver_wc_det (.sig(ver_wall_collision), .clk(display_clock), .pe(pe_ver_wc));
-      pos_edge_det pe_p1c_det (.sig(p1_collision), .clk(display_clock), .pe(pe_p1c));
-      pos_edge_det pe_p2c_det (.sig(p2_collision), .clk(display_clock), .pe(pe_p2c));
     
     always_ff @(posedge display_clock or negedge nReset)
     begin
         // reset display
-        if (~nReset) {box_px, box_py, dx, dy} <= {12'd640, 12'd10, 12'd4, 12'd3};  
+        if (~nReset) {box_px, box_py, dx, dy} <= {12'd640, 12'd360, 12'd3, 12'd4};  
         else 
             begin  
-            if (pe_hor_wc) dy <= ~dy + 1;
-            if (pe_ver_wc) dx <= ~dx + 1;
-            if (pe_p1c || pe_p2c) dx <= ~dx + 1;
-            if ((frame_divider == 250000))
+            if ((frame_divider == 2504177))
                 begin
-                
-                    box_py <= box_py + dy;
-                    box_px <= box_px + dx;                            
+                    if (hor_wall_collision) 
+                        begin 
+                            box_py <= box_py - dy; // This to avoid the box getting trapped at the bottom
+                            dy <= -dy;
+                        end
+                    else if (ver_wall_collision || p1_collision || p2_collision) 
+                       begin
+                        box_px <= box_px - dx; // This to avoid the box getting trapped at the sides 
+                        dx <= -dx;
+                      end
+                    else
+                        begin
+                        // Non Blocking so relies on old dx/dy must separate out
+                            box_py <= box_py + dy;
+                            box_px <= box_px + dx;                            
+                        end
                 end
             end
     end

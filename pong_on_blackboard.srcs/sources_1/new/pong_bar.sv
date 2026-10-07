@@ -28,6 +28,7 @@ module pong_bar #(parameter PLAYER = 0) (
         input logic [21:0] frame_divider,
         
         input logic nReset,
+        
         output logic [11:0] bar_px, bar_py,
 
         output logic bar_on
@@ -70,17 +71,17 @@ module pong_bar #(parameter PLAYER = 0) (
         // reset display
         if (~nReset) {bar_py} <= 12'd0;    
     
-        else if ((frame_divider == 250000)) begin
+        else if ((frame_divider == 2504177)) begin
             // Moving pong box
             if (~out_of_bounds)
             begin
                 if (sw[SWITCH_NUMBER])
                     begin
-                        bar_py <= bar_py - 3;
+                        bar_py <= bar_py - 6;
                     end
                 else
                     begin
-                        bar_py <= bar_py + 3;                
+                        bar_py <= bar_py + 6;                
                     end 
             end
          end
